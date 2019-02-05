@@ -1,16 +1,24 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class TouchControlsScript : MonoBehaviour
 {
     public float DragSpeed = 2;
+    public float PinchSpeed = 4;
+    public float PinchDistanceTreshold = 0.3f;
+
+    public int MaxCameraZoom = 20;
+    public int MinCameraZoom = 100;
     
     private Camera MainCam;
 
     private Cube CurrentlySelectedCube;
 
     private Vector3 DragStartPosition;
+
+    private float PinchStartingDistance;
     
     // Start is called before the first frame update
     void Start()
@@ -24,9 +32,12 @@ public class TouchControlsScript : MonoBehaviour
         HandleCubeSelection();
 
         HandleDrag();
+
+        HandlePinching();
     }
 
   
+
 
     private void HandleCubeSelection()
     {
@@ -148,11 +159,52 @@ public class TouchControlsScript : MonoBehaviour
         }
     }
 
-    private void MoveWithDrag(Vector3 currentDragPosition, Transform transformToMove)
+    private void HandlePinching()
     {
-        
-    }
+        //Check if there are more than two touches currently
+        if (Input.touchCount > 1)
+        {
+            Touch firstTouch = Input.GetTouch(0);
+            Touch secondTouch = Input.GetTouch(1);
+            
+            //Check if the touch just began for the first touch or the second touch
+            if (firstTouch.phase == TouchPhase.Began || secondTouch.phase == TouchPhase.Began)
+            {
+                PinchStartingDistance = Vector3.Distance(firstTouch.position, secondTouch.position);
+            } else if (firstTouch.phase == TouchPhase.Moved || firstTouch.phase == TouchPhase.Moved)
+            {
+                float CurrentPinchDistance = Vector3.Distance(firstTouch.position, secondTouch.position);
 
+                float deltaPinchDistance = CurrentPinchDistance - PinchStartingDistance;
+                
+                if (Math.Abs(deltaPinchDistance) >= PinchDistanceTreshold)
+                {
+                    //We are pinching, check the direction (out or in)
+                    if (deltaPinchDistance < 0)
+                    {
+                        //We are pinching in -> Zoom out or scale the object
+                        if (CurrentlySelectedCube == null)
+                        {
+                            //No cube selected, zoom in the camera
+                            float newZoom = Mathf.Clamp(MainCam.fieldOfView + PinchSpeed / 10, MaxCameraZoom, MinCameraZoom);
+                            MainCam.fieldOfView = newZoom;
+                        }
+                    }
+                    else if (deltaPinchDistance > 0)
+                    {
+                        //We are pinching out -> zoom in or scale the selected object
+                        if (CurrentlySelectedCube == null)
+                        {
+                            //No cube selected, zoom in the camera
+                            float newZoom = Mathf.Clamp(MainCam.fieldOfView - PinchSpeed / 10, MaxCameraZoom, MinCameraZoom);
+                            MainCam.fieldOfView = newZoom;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
     private Vector3 GetTouchPositionInWorldSpace(Touch aTouch)
     {
         //Get the position of the touch in world space
