@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Cube : MonoBehaviour
 {
+    public float MaxScale = 3;
+    public float MinScale = 0.3f;
+    
     private Color DefaultColor;
 
     private MeshRenderer meshRend;
@@ -35,5 +38,40 @@ public class Cube : MonoBehaviour
     {
         //Return the color to the default one
         meshRend.material.color = DefaultColor;
+    }
+
+    
+    /// <summary>
+    /// Increases the scale of the object by certain amount
+    /// </summary>
+    public void ScaleOut(float amount)
+    {
+        //Get the current scale
+        Vector3 newScale = transform.localScale;
+        
+        //Add the scaling amount and clamp it between the minimun and maximum value
+        newScale.x = Mathf.Clamp(newScale.x + amount, MinScale, MaxScale);
+        newScale.y = Mathf.Clamp(newScale.y + amount, MinScale, MaxScale);
+        newScale.z = Mathf.Clamp(newScale.z + amount, MinScale, MaxScale);
+        
+        //Set the new scale
+        transform.localScale = newScale;
+    }
+
+    /// <summary>
+    /// Decreases the scale of the object by certain amount
+    /// </summary>
+    public void ScaleIn(float amount)
+    {
+        //Get the current scale
+        Vector3 newScale = transform.localScale;
+        
+        //Add the scaling amount and clamp it between the minimun and maximum value
+        newScale.x = Mathf.Clamp(newScale.x - amount, MinScale, MaxScale);
+        newScale.y = Mathf.Clamp(newScale.y - amount, MinScale, MaxScale);
+        newScale.z = Mathf.Clamp(newScale.z - amount, MinScale, MaxScale);
+        
+        //Set the new scale
+        transform.localScale = newScale;
     }
 }

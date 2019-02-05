@@ -164,22 +164,26 @@ public class TouchControlsScript : MonoBehaviour
         //Check if there are more than two touches currently
         if (Input.touchCount > 1)
         {
+            //Get both touches
             Touch firstTouch = Input.GetTouch(0);
             Touch secondTouch = Input.GetTouch(1);
             
             //Check if the touch just began for the first touch or the second touch
             if (firstTouch.phase == TouchPhase.Began || secondTouch.phase == TouchPhase.Began)
             {
+                //Get the initial distance between the two touches
                 PinchStartingDistance = Vector3.Distance(firstTouch.position, secondTouch.position);
             } else if (firstTouch.phase == TouchPhase.Moved || firstTouch.phase == TouchPhase.Moved)
             {
+                //When one of them has moved get the current distance between the two touches
                 float CurrentPinchDistance = Vector3.Distance(firstTouch.position, secondTouch.position);
-
+                
+                //Get the difference between current distance and the initial distance
                 float deltaPinchDistance = CurrentPinchDistance - PinchStartingDistance;
                 
                 if (Math.Abs(deltaPinchDistance) >= PinchDistanceTreshold)
                 {
-                    //We are pinching, check the direction (out or in)
+                    //The distance is more than the treshold, we are pinching, check the direction (out or in)
                     if (deltaPinchDistance < 0)
                     {
                         //We are pinching in -> Zoom out or scale the object
@@ -188,6 +192,11 @@ public class TouchControlsScript : MonoBehaviour
                             //No cube selected, zoom in the camera
                             float newZoom = Mathf.Clamp(MainCam.fieldOfView + PinchSpeed / 10, MaxCameraZoom, MinCameraZoom);
                             MainCam.fieldOfView = newZoom;
+                        }
+                        else
+                        {
+                            //Cube is selected, scale the cube accordingly
+                            CurrentlySelectedCube.ScaleIn(PinchSpeed / 100);
                         }
                     }
                     else if (deltaPinchDistance > 0)
@@ -198,6 +207,10 @@ public class TouchControlsScript : MonoBehaviour
                             //No cube selected, zoom in the camera
                             float newZoom = Mathf.Clamp(MainCam.fieldOfView - PinchSpeed / 10, MaxCameraZoom, MinCameraZoom);
                             MainCam.fieldOfView = newZoom;
+                        } else
+                        {
+                            //Cube is selected, scale the cube accordingly
+                            CurrentlySelectedCube.ScaleOut(PinchSpeed / 100);
                         }
                     }
                 }
