@@ -5,6 +5,8 @@ using UnityEngine;
 public class TouchControlsScript : MonoBehaviour
 {
     private Camera MainCam;
+
+    private Cube CurrentlySelectedCube;
     
     // Start is called before the first frame update
     void Start()
@@ -18,23 +20,46 @@ public class TouchControlsScript : MonoBehaviour
         //Check if there is any touch on the screen
         if (Input.touchCount > 0)
         {
-            //Get the position of the first touch in world space
-            Vector3 firstTouchPos = Input.GetTouch(0).position;
-                        
-            //Cast a ray on the touch position
-            Ray ray = MainCam.ScreenPointToRay(firstTouchPos);
-            RaycastHit hit;
-
-            if (Physics.Raycast(ray, out hit))
+            Touch firstTouch = Input.GetTouch(0);
+            
+            //Check if the touch just began
+            if (firstTouch.phase == TouchPhase.Began)
             {
-                //Get the cube
-                GameObject Cube = hit.collider.gameObject;
-                if (Cube.CompareTag("Cube"))
+                //Get the position of the first touch in world space
+                Vector3 firstTouchPos = firstTouch.position;
+
+                //Cast a ray on the touch position
+                Ray ray = MainCam.ScreenPointToRay(firstTouchPos);
+                RaycastHit hit;
+
+                if (Physics.Raycast(ray, out hit))
                 {
-                    Debug.Log("Selected cube");
-                    //Set cube's color to a random color
-                    Cube.GetComponent<MeshRenderer>().material.color = GetRandomColor();
-                }                
+                    //Get the cube
+                    GameObject CubeObj = hit.collider.gameObject;
+                    if (CubeObj.CompareTag("Cube"))
+                    {
+                        Debug.Log("Selected cube");
+                        
+                        //Get the cube script
+                        Cube cubeScript = CubeObj.GetComponent<Cube>();
+            
+                        //Check if we have a cube script attached to the object
+                        if (cubeScript == null)
+                        {
+                            Debug.LogWarning("Cube script not found on Cube object");
+                        }
+                        else
+                        {
+                            //Deselect old cube 
+                            if (CurrentlySelectedCube != null)
+                                CurrentlySelectedCube.Deselect();
+                            
+                            //Select new cube
+                            cubeScript.Select();
+                            CurrentlySelectedCube = cubeScript;
+                        }
+                    }
+                }
             }
         }
     }
@@ -45,13 +70,6 @@ public class TouchControlsScript : MonoBehaviour
         return MainCam.ScreenToWorldPoint(aTouch.position);
     }
 
-    private Color GetRandomColor()
-    {
-        float red = 0.3f;
-        float green = Random.Range(0f, 1f);
-        float blue = Random.Range(0f, 1f);
-
-        return new Color(red, green, blue);
-    }
+    
     
 }
