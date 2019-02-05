@@ -7,6 +7,8 @@ public class TouchControlsScript : MonoBehaviour
     private Camera MainCam;
 
     private Cube CurrentlySelectedCube;
+
+    private Vector3 DragStartPosition;
     
     // Start is called before the first frame update
     void Start()
@@ -16,6 +18,15 @@ public class TouchControlsScript : MonoBehaviour
 
     // Update is called once per frame
     void Update()
+    {
+        HandleCubeSelection();
+
+        HandleDrag();
+    }
+
+  
+
+    private void HandleCubeSelection()
     {
         //Check if there is any touch on the screen
         if (Input.touchCount > 0)
@@ -38,6 +49,7 @@ public class TouchControlsScript : MonoBehaviour
                     GameObject CubeObj = hit.collider.gameObject;
                     if (CubeObj.CompareTag("Cube"))
                     {
+                        //We are touching a cube
                         Debug.Log("Selected cube");
                         
                         //Get the cube script
@@ -59,6 +71,46 @@ public class TouchControlsScript : MonoBehaviour
                             CurrentlySelectedCube = cubeScript;
                         }
                     }
+                    else
+                    {
+                        //We are not touching a cube
+                        //Deselect old cube 
+                        if (CurrentlySelectedCube != null)
+                            CurrentlySelectedCube.Deselect();
+                        CurrentlySelectedCube = null;
+                    }
+                }
+            }
+        }
+    }
+    
+    private void HandleDrag()
+    {
+        //Check if there is any touch on the screen
+        if (Input.touchCount == 1)
+        {
+            Touch firstTouch = Input.GetTouch(0);
+
+            //Check if the touch just began
+            if (firstTouch.phase == TouchPhase.Began)
+            {
+                //Get the initial position of the touch
+                DragStartPosition = Input.GetTouch(0).position;
+            }
+            
+            //Check if the touch is dragged
+            if (firstTouch.phase == TouchPhase.Moved)
+            {
+                if (CurrentlySelectedCube == null)
+                {
+                    //Camera dragging mode
+                    Vector3 CurrentDragPosition = Input.GetTouch(0).position;
+                    Vector3 deltaDragPosition = CurrentDragPosition - DragStartPosition;
+                    deltaDragPosition.z = -deltaDragPosition.z;
+                    Vector3 newPos = transform.position + deltaDragPosition;
+                    newPos.y = transform.position.y;
+                    transform.position = newPos;
+                    DragStartPosition = Input.GetTouch(0).position;
                 }
             }
         }
