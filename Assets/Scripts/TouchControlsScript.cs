@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class TouchControlsScript : MonoBehaviour
 {
+    public float DragSpeed = 2;
+    
     private Camera MainCam;
 
     private Cube CurrentlySelectedCube;
@@ -104,16 +106,51 @@ public class TouchControlsScript : MonoBehaviour
                 if (CurrentlySelectedCube == null)
                 {
                     //Camera dragging mode
-                    Vector3 CurrentDragPosition = Input.GetTouch(0).position;
-                    Vector3 deltaDragPosition = CurrentDragPosition - DragStartPosition;
-                    deltaDragPosition.z = -deltaDragPosition.z;
-                    Vector3 newPos = transform.position + deltaDragPosition;
-                    newPos.y = transform.position.y;
-                    transform.position = newPos;
-                    DragStartPosition = Input.GetTouch(0).position;
+                    //Get the current touch position
+                    Vector3 currentDragPosition = Input.GetTouch(0).position;
+                    
+                    //Get the direction we are dragging
+                    Vector3 deltaDragPosition = MainCam.ScreenToViewportPoint(currentDragPosition - DragStartPosition);
+                    
+                    //Reverse it to move the camera the opposite way
+                    deltaDragPosition = -deltaDragPosition;
+                    
+                    //Get the direction and multiply by the drag speed, so we can easily control our speed
+                    Vector3 dragDirection = new Vector3(deltaDragPosition.x * DragSpeed, 0, deltaDragPosition.y * DragSpeed);
+                    
+                    //Start moving in the specified direction
+                    transform.Translate(dragDirection, Space.World);
+                }
+                else
+                {
+                    //Cube dragging mode
+                    
+                    //Get the current touch position
+                    Vector3 currentDragPosition = Input.GetTouch(0).position;
+                    
+                    //Cast a ray on the touch position
+                    Ray ray = MainCam.ScreenPointToRay(currentDragPosition);
+                    RaycastHit hit;
+
+                    if (Physics.Raycast(ray, out hit))
+                    {
+                        //Check the object we have under the touch position
+                        if (hit.collider.CompareTag("Ground"))
+                        {
+                            //If it's the ground object, move the cube to the x and z position of the touch
+                            Vector3 newPos = hit.point;
+                            newPos.y = CurrentlySelectedCube.transform.position.y;
+                            CurrentlySelectedCube.transform.position = newPos;
+                        }
+                    }
                 }
             }
         }
+    }
+
+    private void MoveWithDrag(Vector3 currentDragPosition, Transform transformToMove)
+    {
+        
     }
 
     private Vector3 GetTouchPositionInWorldSpace(Touch aTouch)
