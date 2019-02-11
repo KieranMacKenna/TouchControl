@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class TouchControlsScript : MonoBehaviour
 {
@@ -38,6 +39,9 @@ public class TouchControlsScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (EventSystem.current.IsPointerOverGameObject())
+            return;
+        
         HandleCubeSelection();
 
         HandleDrag();
@@ -277,7 +281,20 @@ public class TouchControlsScript : MonoBehaviour
     
     private void HandleThreeFingerClick()
     {
-        
+        //Check if we have three touches currentl
+        if (Input.touchCount == 3)
+        {
+            //Check if we have a selected cube
+            if (CurrentlySelectedCube != null)
+            {
+                //Check if any of the touches just began
+                if (Input.GetTouch(0).phase == TouchPhase.Began || Input.GetTouch(1).phase == TouchPhase.Began ||
+                    Input.GetTouch(2).phase == TouchPhase.Began)
+                {
+                    StartCoroutine(RotateCube360());
+                }
+            }
+        }
     }
 
 
@@ -297,5 +314,14 @@ public class TouchControlsScript : MonoBehaviour
             CurrentlySelectedCube.Deselect();
         CurrentlySelectedCube = null;
         deselectionQueued = false;
+    }
+
+    private IEnumerator RotateCube360()
+    {
+        for (int n = 0; n < 37; n++)
+        {
+            CurrentlySelectedCube.transform.Rotate(0, 10, 0);
+            yield return null;
+        }
     }
 }
