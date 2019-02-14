@@ -41,17 +41,16 @@ public class TouchControlsScript : MonoBehaviour
     {
         if (EventSystem.current.IsPointerOverGameObject())
             return;
-        
+
         HandleCubeSelection();
 
         HandleDrag();
 
         HandlePinchAndRotation();
 
-        HandleThreeFingerClick();
     }
 
-    
+
     private void HandleCubeSelection()
     {
         //Check if there is any touch on the screen
@@ -148,7 +147,6 @@ public class TouchControlsScript : MonoBehaviour
                 else
                 {
                     //Cube dragging mode
-
                     //Get the current touch position
                     Vector3 currentDragPosition = Input.GetTouch(0).position;
 
@@ -231,11 +229,13 @@ public class TouchControlsScript : MonoBehaviour
                         //Get rotation direction
                         if (LR.z < 0)
                         {
-                            CurrentlySelectedCube.transform.Rotate(0f, (RotationSpeed) * CurrentRotationAngle, 0f, Space.World);
+                            CurrentlySelectedCube.transform.Rotate(0f, (RotationSpeed) * CurrentRotationAngle, 0f,
+                                Space.World);
                         }
-                        else if (LR.z >  0)
+                        else if (LR.z > 0)
                         {
-                            CurrentlySelectedCube.transform.Rotate(0f, (RotationSpeed) * -CurrentRotationAngle, 0f, Space.World);
+                            CurrentlySelectedCube.transform.Rotate(0f, (RotationSpeed) * -CurrentRotationAngle, 0f,
+                                Space.World);
                         }
                     }
                 }
@@ -279,24 +279,6 @@ public class TouchControlsScript : MonoBehaviour
         }
     }
     
-    private void HandleThreeFingerClick()
-    {
-        //Check if we have three touches currentl
-        if (Input.touchCount == 3)
-        {
-            //Check if we have a selected cube
-            if (CurrentlySelectedCube != null)
-            {
-                //Check if any of the touches just began
-                if (Input.GetTouch(0).phase == TouchPhase.Began || Input.GetTouch(1).phase == TouchPhase.Began ||
-                    Input.GetTouch(2).phase == TouchPhase.Began)
-                {
-                    StartCoroutine(RotateCube360());
-                }
-            }
-        }
-    }
-
 
     private Vector3 GetTouchPositionInWorldSpace(Touch aTouch)
     {
@@ -315,13 +297,6 @@ public class TouchControlsScript : MonoBehaviour
         CurrentlySelectedCube = null;
         deselectionQueued = false;
     }
-
-    private IEnumerator RotateCube360()
-    {
-        for (int n = 0; n < 37; n++)
-        {
-            CurrentlySelectedCube.transform.Rotate(0, 10, 0);
-            yield return null;
-        }
-    }
 }
+
+

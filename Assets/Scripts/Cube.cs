@@ -41,9 +41,8 @@ public class Cube : MonoBehaviour
     }
 
     
-    /// <summary>
+
     /// Increases the scale of the object by certain amount
-    /// </summary>
     public void ScaleOut(float amount)
     {
         //Get the current scale
@@ -58,9 +57,8 @@ public class Cube : MonoBehaviour
         transform.localScale = newScale;
     }
 
-    /// <summary>
+ 
     /// Decreases the scale of the object by certain amount
-    /// </summary>
     public void ScaleIn(float amount)
     {
         //Get the current scale
