@@ -18,7 +18,11 @@ public class Cube : MonoBehaviour
         DefaultColor = meshRend.material.color;
     }
 
-
+    internal void Accellerate(Vector3 acc)
+    {
+        GetComponent<Rigidbody>().AddForce((acc));
+        
+    }
     public void Select()
     {
         //Set cube's color to a random color

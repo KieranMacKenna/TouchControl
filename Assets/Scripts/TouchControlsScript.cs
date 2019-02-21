@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Experimental.XR;
 
 public class TouchControlsScript : MonoBehaviour
 {
@@ -16,7 +17,8 @@ public class TouchControlsScript : MonoBehaviour
     public int MinCameraZoom = 100;
     public float RotationSpeed = 0.5f;
     public float deselectionTime = 0.8f;
-
+    public float AccelerometerRotationSpeed = 1;
+    
     private Camera MainCam;
 
     private Cube CurrentlySelectedCube;
@@ -29,11 +31,13 @@ public class TouchControlsScript : MonoBehaviour
 
     private bool deselectionQueued;
 
+    private float initialXAcc;
 
     // Start is called before the first frame update
     void Start()
     {
         MainCam = Camera.main;
+        initialXAcc = Input.acceleration.x;
     }
 
     // Update is called once per frame
@@ -41,13 +45,25 @@ public class TouchControlsScript : MonoBehaviour
     {
         if (EventSystem.current.IsPointerOverGameObject())
             return;
-
+        
         HandleCubeSelection();
 
         HandleDrag();
 
         HandlePinchAndRotation();
 
+        HandleThreeFingerClick();
+        
+        HandleAccelerometer();
+    }
+
+    private void HandleAccelerometer()
+    {
+        if(CurrentlySelectedCube)
+        CurrentlySelectedCube.Accellerate(Input.acceleration);
+      //  transform.Translate(Input.acceleration.x * 0.00f, Input.acceleration.y * 0.00f, -Input.acceleration.z *0.01f);
+        
+        
     }
 
 
@@ -172,6 +188,7 @@ public class TouchControlsScript : MonoBehaviour
         }
     }
 
+    //Reference https://www.youtube.com/watch?v=S3pjBQObC90
     private void HandlePinchAndRotation()
     {
         //Check if there are more than two touches currently
@@ -229,13 +246,11 @@ public class TouchControlsScript : MonoBehaviour
                         //Get rotation direction
                         if (LR.z < 0)
                         {
-                            CurrentlySelectedCube.transform.Rotate(0f, (RotationSpeed) * CurrentRotationAngle, 0f,
-                                Space.World);
+                            CurrentlySelectedCube.transform.Rotate(0f, (RotationSpeed) * CurrentRotationAngle, 0f, Space.World);
                         }
-                        else if (LR.z > 0)
+                        else if (LR.z >  0)
                         {
-                            CurrentlySelectedCube.transform.Rotate(0f, (RotationSpeed) * -CurrentRotationAngle, 0f,
-                                Space.World);
+                            CurrentlySelectedCube.transform.Rotate(0f, (RotationSpeed) * -CurrentRotationAngle, 0f, Space.World);
                         }
                     }
                 }
@@ -279,6 +294,24 @@ public class TouchControlsScript : MonoBehaviour
         }
     }
     
+    private void HandleThreeFingerClick()
+    {
+        //Check if we have three touches currentl
+        if (Input.touchCount == 3)
+        {
+            //Check if we have a selected cube
+            if (CurrentlySelectedCube != null)
+            {
+                //Check if any of the touches just began
+                if (Input.GetTouch(0).phase == TouchPhase.Began || Input.GetTouch(1).phase == TouchPhase.Began ||
+                    Input.GetTouch(2).phase == TouchPhase.Began)
+                {
+                    StartCoroutine(RotateCube360());
+                }
+            }
+        }
+    }
+
 
     private Vector3 GetTouchPositionInWorldSpace(Touch aTouch)
     {
@@ -294,9 +327,16 @@ public class TouchControlsScript : MonoBehaviour
 
         if (CurrentlySelectedCube != null)
             CurrentlySelectedCube.Deselect();
-        CurrentlySelectedCube = null;
-        deselectionQueued = false;
+            CurrentlySelectedCube = null;
+            deselectionQueued = false;
+    }
+
+    private IEnumerator RotateCube360()
+    {
+        for (int n = 0; n < 37; n++)
+        {
+            CurrentlySelectedCube.transform.Rotate(0, 10, 0);
+            yield return null;
+        }
     }
 }
-
-
