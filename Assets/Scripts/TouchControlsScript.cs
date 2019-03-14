@@ -207,7 +207,7 @@ public class TouchControlsScript : MonoBehaviour
                 PinchStartingDistance = Vector3.Distance(firstTouch.position, secondTouch.position);
 
                 RotationStartingVector = firstTouch.position - secondTouch.position;
-                //RotationStartingAngle = Vector3.Angle(rotationVector, Vector3.up);
+                //RotationStartingAngle = Vector3.Angle(rotationVector, Vector3.up);;
             }
             else if (firstTouch.phase == TouchPhase.Moved || firstTouch.phase == TouchPhase.Moved)
             {
