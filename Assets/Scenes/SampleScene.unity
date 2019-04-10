@@ -717,7 +717,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -285.50003, y: 67}
+  m_AnchoredPosition: {x: -287.57, y: 128.4}
   m_SizeDelta: {x: 207.52, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &539552053
@@ -761,7 +761,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Points : 0'
+  m_Text: 'Player Points : 0'
 --- !u!4 &701523690 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7184847811356611465, guid: 8fe418b05fb778d41a481920a01f55d9,
@@ -1288,6 +1288,36 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3309711176766661628, guid: 33ab0635d7d950348b33d5ad851b6e03,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -319.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3309711176766661628, guid: 33ab0635d7d950348b33d5ad851b6e03,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -184.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3309711176766661628, guid: 33ab0635d7d950348b33d5ad851b6e03,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 137.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8745806930523507460, guid: 33ab0635d7d950348b33d5ad851b6e03,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0.9251052
+      objectReference: {fileID: 0}
+    - target: {fileID: 8745806930523507460, guid: 33ab0635d7d950348b33d5ad851b6e03,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.9716981
+      objectReference: {fileID: 0}
+    - target: {fileID: 8745806930523507460, guid: 33ab0635d7d950348b33d5ad851b6e03,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.0779192
+      objectReference: {fileID: 0}
     - target: {fileID: 1621177258, guid: 33ab0635d7d950348b33d5ad851b6e03, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_BoolArgument
       value: 1
@@ -1299,6 +1329,11 @@ PrefabInstance:
     - target: {fileID: 1621177258, guid: 33ab0635d7d950348b33d5ad851b6e03, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: SetActive
+      objectReference: {fileID: 0}
+    - target: {fileID: 507643943955795234, guid: 33ab0635d7d950348b33d5ad851b6e03,
+        type: 3}
+      propertyPath: m_Text
+      value: Unlock Achievement
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 33ab0635d7d950348b33d5ad851b6e03, type: 3}
@@ -1457,8 +1492,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 83, y: -105.00006}
-  m_SizeDelta: {x: 169.55, y: 43.880005}
+  m_AnchoredPosition: {x: -102, y: -46.7}
+  m_SizeDelta: {x: 81.6, y: 43.880005}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &999278706
 MonoBehaviour:
@@ -1526,7 +1561,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.67105734, g: 0.8810568, b: 0.9811321, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -1951,8 +1986,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -285.50003, y: 114}
-  m_SizeDelta: {x: 207.52, y: 30}
+  m_AnchoredPosition: {x: -314.4, y: 80}
+  m_SizeDelta: {x: 150.6, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1649785049
 GameObject:
@@ -1990,8 +2025,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -129.40002, y: -105}
-  m_SizeDelta: {x: 169.55, y: 43.880005}
+  m_AnchoredPosition: {x: -192.6, y: -46.2}
+  m_SizeDelta: {x: 81.2, y: 43.880005}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1649785051
 MonoBehaviour:
@@ -2059,7 +2094,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.6745098, g: 0.88235295, b: 0.9843137, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
